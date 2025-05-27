@@ -128,6 +128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 140242153}
+  - component: {fileID: 140242154}
   m_Layer: 5
   m_Name: TitleObject
   m_TagString: Untagged
@@ -155,6 +156,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &140242154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140242152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 413048e9b9cf14936913078009c1f3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startButton: {fileID: 2086787737}
 --- !u!1 &241058040
 GameObject:
   m_ObjectHideFlags: 0
@@ -851,7 +865,7 @@ GameObject:
   - component: {fileID: 2086787738}
   - component: {fileID: 2086787737}
   m_Layer: 0
-  m_Name: Button
+  m_Name: StartButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -874,7 +888,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -2.34}
+  m_AnchoredPosition: {x: 0, y: -2.3679}
   m_SizeDelta: {x: 5.581, y: 4.7357}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2086787737
