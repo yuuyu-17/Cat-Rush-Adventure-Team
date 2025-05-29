@@ -14,6 +14,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Project/Scenes/HomeSene.unity
     guid: b65dade3f08c74ee8b96cb0e75bea97e
+  - enabled: 1
+    path: Assets/Project/Scenes/InGameSene.unity
+    guid: 76359ddabe48f4b518dca4108aa34a72
+  - enabled: 1
+    path: Assets/Project/Scenes/ResultSene.unity
+    guid: 6ff2f17c89faa466eaebc749ef2a1206
+  - enabled: 1
+    path: Assets/Project/Scenes/RibrarySene.unity
+    guid: d491883ae4ea948ecbed6fa646087d78
+  - enabled: 1
+    path: Assets/Project/Scenes/StrengthSene.unity
+    guid: 269725436f6874ebb97a6b9368f8a936
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
