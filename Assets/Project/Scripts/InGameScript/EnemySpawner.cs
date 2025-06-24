@@ -36,16 +36,26 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
-        // 画面右端のワールド座標を取得
-        Vector3 screenRight = Camera.main.ViewportToWorldPoint(new Vector3(1, 0.5f, Camera.main.nearClipPlane)); // Yは画面中央に
+       // 画面右端のワールド座標を取得
+        Vector3 screenRight = Camera.main.ViewportToWorldPoint(new Vector3(1, 0.5f, Camera.main.nearClipPlane)); 
         
         // 敵のY座標は、スポーナーのY座標+オフセット
-        Vector3 spawnPosition = new Vector3(screenRight.x + 2f, transform.position.y + spawnYOffset, 0); 
+        Vector3 spawnPosition = new Vector3(screenRight.x + 2f, transform.position.y + spawnYOffset, 0);
         
         GameObject newEnemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-        
-        // Canvasの子として生成する場合、位置をワールド座標で設定した後、親を設定
-        newEnemy.transform.SetParent(parentTransform, true); // ★世界座標を維持したまま親を設定する★
-                                                             // 'true' は worldPositionStays の引数
+
+        // 敵自身をinGameObjectParentの子として設定
+        newEnemy.transform.SetParent(parentTransform, true);
+
+        // 生成された敵のEnemyMoverコンポーネントを取得し、エフェクトの親を設定
+        EnemyMover enemyMover = newEnemy.GetComponent<EnemyMover>();
+        if (enemyMover != null)
+        {
+            enemyMover.SetEffectParent(parentTransform); // EnemyMoverに親Transformを渡す
+        }
+        else
+        {
+            Debug.LogWarning("生成された敵プレハブにEnemyMoverコンポーネントが見つかりません。", newEnemy);
+        }
     }
 }
