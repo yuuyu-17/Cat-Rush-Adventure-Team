@@ -7,9 +7,12 @@ public class EnemyMover : MonoBehaviour
     [Header("エフェクト設定")]
     public GameObject slashEffectPrefab; // 斬撃エフェクトのプレハブをInspectorから割り当てる
     public Vector3 effectOffset = new Vector3(0, 0, -0.1f); // エフェクトの位置調整（Zを少し手前にすると重なりやすい）
-    
-    //この変数は外部（EnemySpawner）から設定されるため、privateにする
-    private Transform _effectParentTransform;
+    private Transform _effectParentTransform; //この変数は外部（EnemySpawner）から設定されるため、privateにする
+
+    [Header("報酬設定")]
+    public int coinsOnDefeat = 10; // 倒した時に獲得するコインの数
+    public ItemType itemOnDefeat = ItemType.Coin; // 倒した時に獲得するアイテムの種類
+    public int itemCountOnDefeat = 1; // 獲得するアイテムの数
 
     //エフェクトの親Transformを設定するための公開メソッド
     public void SetEffectParent(Transform parent)
@@ -50,6 +53,20 @@ public class EnemyMover : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("敵がプレイヤーに当たった！");
+
+            // ★★★ 報酬獲得処理 ★★★
+            if (InGameManager.Instance != null)
+            {
+                InGameManager.Instance.AddCoins(coinsOnDefeat); // コインを追加
+                if (itemOnDefeat != ItemType.None)
+                {
+                    InGameManager.Instance.AddItem(itemOnDefeat, itemCountOnDefeat); // アイテムを追加
+                }
+            }
+            else
+            {
+                Debug.LogWarning("InGameManagerが見つかりません。報酬を獲得できませんでした。");
+            }
             
             // 斬撃エフェクトを生成
             if (slashEffectPrefab != null)
@@ -60,7 +77,7 @@ public class EnemyMover : MonoBehaviour
                 // ★ここが変更点★: _effectParentTransformが設定されていれば親にする
                 if (_effectParentTransform != null)
                 {
-                    newEffect.transform.SetParent(_effectParentTransform, true); 
+                    newEffect.transform.SetParent(_effectParentTransform, true);
                 }
                 else
                 {
