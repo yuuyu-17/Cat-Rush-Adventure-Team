@@ -4,6 +4,19 @@ public class EnemyMover : MonoBehaviour
 {
     public float selfMoveSpeed = 1.0f; // 敵自身の速度（プレイヤーに向かう追加速度）
 
+    [Header("エフェクト設定")]
+    public GameObject slashEffectPrefab; // 斬撃エフェクトのプレハブをInspectorから割り当てる
+    public Vector3 effectOffset = new Vector3(0, 0, -0.1f); // エフェクトの位置調整（Zを少し手前にすると重なりやすい）
+    
+    //この変数は外部（EnemySpawner）から設定されるため、privateにする
+    private Transform _effectParentTransform;
+
+    //エフェクトの親Transformを設定するための公開メソッド
+    public void SetEffectParent(Transform parent)
+    {
+        _effectParentTransform = parent;
+    }
+
     void Update()
     {
         // InGameManagerから現在のゲーム全体のスクロール速度を取得
@@ -37,6 +50,25 @@ public class EnemyMover : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("敵がプレイヤーに当たった！");
+            
+            // 斬撃エフェクトを生成
+            if (slashEffectPrefab != null)
+            {
+                Vector3 effectSpawnPosition = transform.position + effectOffset;
+                GameObject newEffect = Instantiate(slashEffectPrefab, effectSpawnPosition, Quaternion.identity);
+                
+                // ★ここが変更点★: _effectParentTransformが設定されていれば親にする
+                if (_effectParentTransform != null)
+                {
+                    newEffect.transform.SetParent(_effectParentTransform, true); 
+                }
+                else
+                {
+                    Debug.LogWarning("エフェクトの親Transformが設定されていません。エフェクトはルートに生成されます。", this);
+                }
+            }
+
+            // 敵自身を消滅させる
             Destroy(gameObject);
         }
     }
