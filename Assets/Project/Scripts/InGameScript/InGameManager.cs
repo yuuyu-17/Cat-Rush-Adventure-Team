@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections.Generic; // Dictionaryを使うために必要
+using System.Collections.Generic;
+using TMPro;
 
 public class InGameManager : MonoBehaviour
 {
@@ -21,8 +22,14 @@ public class InGameManager : MonoBehaviour
 
     public int totalCoinsCollected { get; private set; } // 獲得した総コイン数
 
-    // 獲得したアイテムとその数を管理するDictionary
-    public Dictionary<ItemType, int> collectedItems { get; private set; } = new Dictionary<ItemType, int>();
+    public Dictionary<ItemType, int> collectedItems { get; private set; } = new Dictionary<ItemType, int>(); // 獲得したアイテムとその数を管理するDictionary
+
+    public float totalDistanceTraveled { get; private set; } // プレイヤーが移動した総距離
+
+    [Header("インゲームUI表示設定")]
+    [Tooltip("現在の移動距離を表示するTextMeshProUGUIコンポーネントを割り当ててください。")]
+    public TextMeshProUGUI distanceTextUI; // 移動距離を表示するText
+
 
     private void Awake()
     {
@@ -50,6 +57,8 @@ public class InGameManager : MonoBehaviour
                 collectedItems[type] = 0;
             }
         }
+        totalDistanceTraveled = 0f; // ゲーム開始時に移動距離をリセット
+        UpdateDistanceUI(); // 初期表示を更新
     }
 
     private void Update()
@@ -60,6 +69,9 @@ public class InGameManager : MonoBehaviour
         if (!IsGameOver && !isTimeUp) // ゲームが終了しておらず、時間切れでもない場合のみ
         {
             CurrentGameScrollSpeed = baseScrollSpeed + (_playerCurrentMoveSpeed * playerSpeedInfluence);
+            // スクロール速度に基づいて移動距離を加算
+            totalDistanceTraveled += CurrentGameScrollSpeed * Time.deltaTime;
+            UpdateDistanceUI(); // UIを毎フレーム更新
         }
         else
         {
@@ -96,6 +108,16 @@ public class InGameManager : MonoBehaviour
             collectedItems.Add(type, count);
         }
         Debug.Log($"{type.ToString()} を {count} 個獲得！現在: {collectedItems[type]} 個");
+    }
+
+    // 移動距離をUIテキストに表示するメソッド
+    private void UpdateDistanceUI()
+    {
+        if (distanceTextUI != null)
+        {
+            // 距離を小数点以下2桁で表示
+            distanceTextUI.text = $"距離: {totalDistanceTraveled:F2} m";
+        }
     }
 
     // ゲームオーバー処理（時間切れ以外でゲームを終了する場合）
