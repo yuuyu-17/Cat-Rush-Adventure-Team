@@ -69,13 +69,12 @@ public class InGameManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // インゲームシーンがロードされたときにのみ処理を実行
-        // "InGameScene" は実際のインゲームシーン名に置き換えてください
         if (scene.name == "InGameSene" || scene.name == "YourMainGameSceneName") 
         {
             InitializeForNewGame();
             FindAndAssignGameUI(); // 新しいシーンのUI要素を探して割り当てる
 
-            // ゲーム開始イベントを発火 (他のスクリプトがゲーム開始を検知できるように)
+            // ゲーム開始イベントを発火
             if (OnGameStart != null)
             {
                 OnGameStart();
@@ -89,7 +88,7 @@ public class InGameManager : MonoBehaviour
     private void InitializeForNewGame()
     {
         IsGameOver = false;
-        currentRunDistanceTraveled = 0f; // 距離は新しいゲームごとにリセット
+        currentRunDistanceTraveled = 0f;
     }
 
     private void Start()

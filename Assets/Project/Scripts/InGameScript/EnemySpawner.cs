@@ -19,7 +19,7 @@ public class EnemySpawner : MonoBehaviour
         if (parentTransform == null)
         {
             Debug.LogWarning("EnemySpawnerに親Transformが設定されていません。このオブジェクト自身が親になります。", this);
-            parentTransform = this.transform; 
+            parentTransform = this.transform;
         }
     }
 
