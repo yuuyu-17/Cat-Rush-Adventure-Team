@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections.Generic; // Dictionaryを使うために必要
+using System.Collections.Generic;
+using TMPro;
 
 public class InGameManager : MonoBehaviour
 {
@@ -21,8 +22,19 @@ public class InGameManager : MonoBehaviour
 
     public int totalCoinsCollected { get; private set; } // 獲得した総コイン数
 
-    // 獲得したアイテムとその数を管理するDictionary
-    public Dictionary<ItemType, int> collectedItems { get; private set; } = new Dictionary<ItemType, int>();
+    public Dictionary<ItemType, int> collectedItems { get; private set; } = new Dictionary<ItemType, int>(); // 獲得したアイテムとその数を管理するDictionary
+
+    public float currentRunDistanceTraveled { get; private set; } // 現在のゲームプレイでの移動距離
+
+    //インゲームUI表示用
+    [Header("インゲームUI表示設定")]
+    [Tooltip("現在の移動距離を表示するTextMeshProUGUIコンポーネントを割り当ててください。")]
+    private TextMeshProUGUI _distanceTextUI;
+
+    // ゲーム開始時とシーン切り替え時に実行されるイベント
+    public delegate void OnGameStartDelegate();
+    public static event OnGameStartDelegate OnGameStart;
+
 
     private void Awake()
     {
@@ -37,33 +49,85 @@ public class InGameManager : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        IsGameOver = false;
-        totalCoinsCollected = 0; // ゲーム開始時にコインをリセット
-        collectedItems.Clear(); // ゲーム開始時にアイテムをリセット
-        // 各アイテムタイプをDictionaryに初期化（こうすると後で追加が楽）
-        foreach (ItemType type in System.Enum.GetValues(typeof(ItemType)))
+        // シーンがロードされるたびにOnSceneLoadedメソッドを購読
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        // シーンアンロード時に購読を解除 (メモリリーク防止)
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    /// <summary>
+    /// シーンがロードされたときに呼び出されるメソッド
+    /// </summary>
+    /// <param name="scene">ロードされたシーン</param>
+    /// <param name="mode">ロードモード</param>
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // インゲームシーンがロードされたときにのみ処理を実行
+        // "InGameScene" は実際のインゲームシーン名に置き換えてください
+        if (scene.name == "InGameSene" || scene.name == "YourMainGameSceneName") 
         {
-            if (type != ItemType.None) // Noneは除外
+            InitializeForNewGame();
+            FindAndAssignGameUI(); // 新しいシーンのUI要素を探して割り当てる
+
+            // ゲーム開始イベントを発火 (他のスクリプトがゲーム開始を検知できるように)
+            if (OnGameStart != null)
             {
-                collectedItems[type] = 0;
+                OnGameStart();
             }
         }
     }
 
+    /// <summary>
+    /// ゲーム開始時や新しいゲームが始まった時に呼ばれる初期化処理
+    /// </summary>
+    private void InitializeForNewGame()
+    {
+        IsGameOver = false;
+        currentRunDistanceTraveled = 0f; // 距離は新しいゲームごとにリセット
+    }
+
+    private void Start()
+    {
+        if (SceneManager.GetActiveScene().name == "InGameScene" || SceneManager.GetActiveScene().name == "YourMainGameSceneName")
+        {
+             InitializeForNewGame();
+             FindAndAssignGameUI();
+             if (OnGameStart != null)
+             {
+                 OnGameStart();
+             }
+        }
+    }
+
+
     private void Update()
     {
-        // GameTimerからIsTimeUpの状態を取得してゲーム進行を判断
+        // ゲームがインゲームシーンにいるかどうかをチェック（UI更新のため）
+        if (_distanceTextUI == null && (SceneManager.GetActiveScene().name == "InGameScene" || SceneManager.GetActiveScene().name == "YourMainGameSceneName"))
+        {
+            FindAndAssignGameUI(); // UI参照が失われた場合に再度検索
+        }
+
         bool isTimeUp = (GameTimer.Instance != null && GameTimer.Instance.IsTimeUp);
 
-        if (!IsGameOver && !isTimeUp) // ゲームが終了しておらず、時間切れでもない場合のみ
+        if (!IsGameOver && !isTimeUp)
         {
             CurrentGameScrollSpeed = baseScrollSpeed + (_playerCurrentMoveSpeed * playerSpeedInfluence);
+            //現在のゲームプレイでの移動距離を更新
+            currentRunDistanceTraveled += CurrentGameScrollSpeed * Time.deltaTime;
+            UpdateDistanceUI();
         }
         else
         {
-            CurrentGameScrollSpeed = 0f; // ゲーム終了時または時間切れ時はスクロール停止
+            CurrentGameScrollSpeed = 0f;
+            // ゲーム終了時にUIを最終更新 (距離が固定されるため)
+            UpdateDistanceUI();
         }
     }
 
@@ -96,6 +160,31 @@ public class InGameManager : MonoBehaviour
             collectedItems.Add(type, count);
         }
         Debug.Log($"{type.ToString()} を {count} 個獲得！現在: {collectedItems[type]} 個");
+    }
+
+    /// <summary>
+    /// インゲームシーンのUI要素を探して割り当てます。
+    /// </summary>
+    private void FindAndAssignGameUI()
+    {
+        // シーン内の"DistanceText"という名前のTextMeshProUGUIを探す
+        _distanceTextUI = GameObject.Find("DistanceText")?.GetComponent<TextMeshProUGUI>();
+        if (_distanceTextUI == null)
+        {
+            Debug.LogWarning("インゲームシーンで 'DistanceText' という名前のTextMeshProUGUIが見つかりません。距離表示UIは機能しません。", this);
+        }
+        UpdateDistanceUI(); // UI参照が設定されたら一度更新
+    }
+
+    /// <summary>
+    /// 現在のゲームプレイでの移動距離をUIテキストに表示します。
+    /// </summary>
+    private void UpdateDistanceUI()
+    {
+        if (_distanceTextUI != null)
+        {
+            _distanceTextUI.text = $"距離: {currentRunDistanceTraveled:F2} m";
+        }
     }
 
     // ゲームオーバー処理（時間切れ以外でゲームを終了する場合）

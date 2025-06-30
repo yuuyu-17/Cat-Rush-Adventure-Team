@@ -5,8 +5,8 @@ public class ResultUIManager : MonoBehaviour
 {
     [Header("UI要素")]
     public TextMeshProUGUI coinsText; // コイン表示用TextをInspectorから割り当てる
-    // 獲得したアイテムを表示するためのText配列（またはリスト）
     public TextMeshProUGUI[] itemTexts; // アイテム表示用TextをInspectorから割り当てる
+    public TextMeshProUGUI totalDistanceText; // 総移動距離表示用TextをInspectorから割り当てる
 
     void Start()
     {
@@ -57,6 +57,12 @@ public class ResultUIManager : MonoBehaviour
             {
                 itemTexts[i].text = ""; // またはgameObject.SetActive(false);
             }
+        }
+
+        //1ゲームでの総移動距離の表示
+        if (totalDistanceText != null)
+        {
+            totalDistanceText.text = $"進行距離: {InGameManager.Instance.currentRunDistanceTraveled:F2} m";
         }
     }
 }

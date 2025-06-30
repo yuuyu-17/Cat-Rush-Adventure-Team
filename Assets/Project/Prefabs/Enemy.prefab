@@ -181,7 +181,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selfMoveSpeed: 2
   slashEffectPrefab: {fileID: 2045963273793778116, guid: f22c61d47b37c43a3b047df34c59ced3, type: 3}
-  effectOffset: {x: 0.5, y: 0, z: 0}
+  effectOffset: {x: 0.5, y: 0, z: 0.2}
   coinsOnDefeat: 10
   itemOnDefeat: 2
   itemCountOnDefeat: 1
