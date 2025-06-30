@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EnemyMover : MonoBehaviour
 {
-    public float selfMoveSpeed = 1.0f; // 敵自身の速度（プレイヤーに向かう追加速度）
+    public float selfMoveSpeed = 1.0f; // 敵自身の速度
 
     [Header("エフェクト設定")]
     public GameObject slashEffectPrefab; // 斬撃エフェクトのプレハブをInspectorから割り当てる
@@ -39,22 +39,21 @@ public class EnemyMover : MonoBehaviour
         transform.Translate(Vector3.left * totalMovement);
 
         // 画面外に出たら消滅させる
-        // Camera.main.ViewportToWorldPoint はワールド座標を返すため、CanvasがWorld Spaceであれば機能します。
         Vector3 screenLeft = Camera.main.ViewportToWorldPoint(new Vector3(0, 0.5f, Camera.main.nearClipPlane)); // Yは中心で判定
-        if (transform.position.x < screenLeft.x - 2f) // 少し画面外に出てから消す
+        if (transform.position.x < screenLeft.x - 2f)
         {
             Destroy(gameObject);
         }
     }
 
-    // Is TriggerがONのCollider2Dと接触したときに呼ばれる
+    //プレイヤーに当たったら
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
             Debug.Log("敵がプレイヤーに当たった！");
 
-            // ★★★ 報酬獲得処理 ★★★
+            //報酬獲得処理
             if (InGameManager.Instance != null)
             {
                 InGameManager.Instance.AddCoins(coinsOnDefeat); // コインを追加
@@ -67,14 +66,14 @@ public class EnemyMover : MonoBehaviour
             {
                 Debug.LogWarning("InGameManagerが見つかりません。報酬を獲得できませんでした。");
             }
-            
+
             // 斬撃エフェクトを生成
             if (slashEffectPrefab != null)
             {
                 Vector3 effectSpawnPosition = transform.position + effectOffset;
                 GameObject newEffect = Instantiate(slashEffectPrefab, effectSpawnPosition, Quaternion.identity);
                 
-                // ★ここが変更点★: _effectParentTransformが設定されていれば親にする
+                //_effectParentTransformが設定されていれば親にする
                 if (_effectParentTransform != null)
                 {
                     newEffect.transform.SetParent(_effectParentTransform, true);

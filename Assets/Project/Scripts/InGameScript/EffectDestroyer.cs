@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EffectDestroyer : MonoBehaviour
 {
-   public float lifetime = 0.5f; // エフェクトが表示される時間（秒）
+   public float lifetime = 0.5f; // エフェクトが表示される時間
 
     void Start()
     {

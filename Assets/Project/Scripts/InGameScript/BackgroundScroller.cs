@@ -22,7 +22,7 @@ public class BackgroundScroller : MonoBehaviour
             currentScrollSpeed = 1.0f; // InGameManagerが見つからない場合、デフォルトの速度を設定
         }
 
-        // 背景を左に移動させる（ここが変更なしでメインの処理）
+        // 背景を左に移動させる
         transform.Translate(Vector3.left * currentScrollSpeed * Time.deltaTime);
     }
 }

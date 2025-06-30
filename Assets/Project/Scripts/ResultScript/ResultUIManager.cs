@@ -37,9 +37,7 @@ public class ResultUIManager : MonoBehaviour
                 {
                     // ItemTypeのEnum名を文字列に変換し、スペースを加えて表示
                     string itemName = itemEntry.Key.ToString();
-                    // 例: "HealthPotion" -> "Health Potion"
                     itemName = System.Text.RegularExpressions.Regex.Replace(itemName, "([a-z])([A-Z])", "$1 $2");
-
                     itemTexts[textIndex].text = $"{itemName}: {itemEntry.Value} 個";
                     textIndex++;
                 }
@@ -55,7 +53,7 @@ public class ResultUIManager : MonoBehaviour
         {
             if (itemTexts[i] != null)
             {
-                itemTexts[i].text = ""; // またはgameObject.SetActive(false);
+                itemTexts[i].text = "";
             }
         }
 
