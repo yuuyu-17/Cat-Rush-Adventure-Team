@@ -117,7 +117,7 @@ public class GameTimer : MonoBehaviour
             int seconds = Mathf.FloorToInt(_currentTime % 60);
 
             // フォーマットして表示 (例: 01:30)
-            timerTextUI.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+            timerTextUI.text = string.Format("時間:{0:00}:{1:00}", minutes, seconds);
         }
     }
 }
