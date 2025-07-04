@@ -684,9 +684,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a7d5a3639ad6493ba6f22bbcb302589, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseScrollSpeed: 2
-  playerSpeedInfluence: 0
-  distanceTextUI: {fileID: 1519541057}
+  baseScrollSpeed: 1
+  playerSpeedInfluence: 1
+  basePlayerMoveSpeed: 1
+  moveSpeedPerLevel: 0.5
+  initialUpgradeCost: 10
+  upgradeCostIncreasePerLevel: 5
 --- !u!4 &427998696
 Transform:
   m_ObjectHideFlags: 0
