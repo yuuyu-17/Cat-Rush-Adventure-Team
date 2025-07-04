@@ -686,7 +686,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseScrollSpeed: 1
   playerSpeedInfluence: 1
-  basePlayerMoveSpeed: 5
+  basePlayerMoveSpeed: 1
   moveSpeedPerLevel: 0.5
   initialUpgradeCost: 10
   upgradeCostIncreasePerLevel: 5
