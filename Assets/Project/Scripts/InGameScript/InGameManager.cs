@@ -12,9 +12,9 @@ public class InGameManager : MonoBehaviour
     public float baseScrollSpeed = 1.0f;
 
     [Tooltip("プレイヤーの移動速度がスクロール速度に与える影響の係数")]
-    public float playerSpeedInfluence = 0f;
+    public float playerSpeedInfluence = 1f;
 
-    private float _playerCurrentMoveSpeed = 0f;
+    private float _playerCurrentMoveSpeed = 1f;
 
     public float CurrentGameScrollSpeed { get; private set; }
 
@@ -22,13 +22,19 @@ public class InGameManager : MonoBehaviour
 
     public int totalCoinsCollected { get; private set; } // 獲得した総コイン数
 
-    public Dictionary<ItemType, int> collectedItems { get; private set; } = new Dictionary<ItemType, int>(); // 獲得したアイテムとその数を管理するDictionary
+    public Dictionary<ItemType, int> collectedItems { get; private set; } = new Dictionary<ItemType, int>(); // 獲得したアイテムとその数を管理
+
+    [Header("プレイヤー能力値")]
+    public float basePlayerMoveSpeed = 1.0f; // プレイヤーの基本移動速度
+    public int playerMoveSpeedLevel { get; private set; } // 移動速度の現在の強化レベル
+    public float moveSpeedPerLevel = 0.5f; // レベルアップごとの移動速度上昇量
+    public int initialUpgradeCost = 10; // 最初の強化に必要なコイン数
+    public int upgradeCostIncreasePerLevel = 5; // レベルアップごとにコストが増加する量
 
     public float currentRunDistanceTraveled { get; private set; } // 現在のゲームプレイでの移動距離
 
     //インゲームUI表示用
     [Header("インゲームUI表示設定")]
-    [Tooltip("現在の移動距離を表示するTextMeshProUGUIコンポーネントを割り当ててください。")]
     private TextMeshProUGUI _distanceTextUI;
 
     // ゲーム開始時とシーン切り替え時に実行されるイベント
@@ -42,6 +48,12 @@ public class InGameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+
+            // 初回起動時のみ能力値を初期化
+            if (playerMoveSpeedLevel == 0) // まだ初期化されていない場合
+            {
+                playerMoveSpeedLevel = 1; // 初期レベルを1とする
+            }
         }
         else
         {
@@ -57,7 +69,7 @@ public class InGameManager : MonoBehaviour
 
     private void OnDisable()
     {
-        // シーンアンロード時に購読を解除 (メモリリーク防止)
+        // シーンアンロード時に購読を解除
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
@@ -69,7 +81,7 @@ public class InGameManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // インゲームシーンがロードされたときにのみ処理を実行
-        if (scene.name == "InGameSene" || scene.name == "YourMainGameSceneName") 
+        if (scene.name == "InGameSene" || scene.name == "YourMainGameSceneName")
         {
             InitializeForNewGame();
             FindAndAssignGameUI(); // 新しいシーンのUI要素を探して割り当てる
@@ -118,14 +130,17 @@ public class InGameManager : MonoBehaviour
         if (!IsGameOver && !isTimeUp)
         {
             CurrentGameScrollSpeed = baseScrollSpeed + (_playerCurrentMoveSpeed * playerSpeedInfluence);
-            //現在のゲームプレイでの移動距離を更新
+
+            // プレイヤーの実際の移動速度は、基本速度 + (レベル * レベルごとの上昇量)
+            float actualPlayerSpeed = basePlayerMoveSpeed + (playerMoveSpeedLevel - 1) * moveSpeedPerLevel;
+            SetPlayerCurrentMoveSpeed(actualPlayerSpeed); // プレイヤーの移動速度を更新
+            
             currentRunDistanceTraveled += CurrentGameScrollSpeed * Time.deltaTime;
             UpdateDistanceUI();
         }
         else
         {
             CurrentGameScrollSpeed = 0f;
-            // ゲーム終了時にUIを最終更新 (距離が固定されるため)
             UpdateDistanceUI();
         }
     }
@@ -184,6 +199,44 @@ public class InGameManager : MonoBehaviour
         {
             _distanceTextUI.text = $"距離: {currentRunDistanceTraveled:F2} m";
         }
+    }
+
+    /// <summary>
+    /// プレイヤーの移動速度を強化します。
+    /// </summary>
+    /// <returns>強化が成功した場合はtrue、コイン不足などで失敗した場合はfalseを返します。</returns>
+    public bool UpgradePlayerMoveSpeed()
+    {
+        int cost = GetMoveSpeedUpgradeCost();
+        if (totalCoinsCollected >= cost)
+        {
+            totalCoinsCollected -= cost;
+            playerMoveSpeedLevel++;
+            Debug.Log($"移動速度を強化！レベル {playerMoveSpeedLevel} になりました。残りコイン: {totalCoinsCollected}");
+            return true;
+        }
+        else
+        {
+            Debug.Log("コインが足りません！");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 次の移動速度強化に必要なコイン数を取得します。
+    /// </summary>
+    public int GetMoveSpeedUpgradeCost()
+    {
+        // レベル1の時はinitialUpgradeCost、その後はレベルごとに増加
+        return initialUpgradeCost + (playerMoveSpeedLevel - 1) * upgradeCostIncreasePerLevel;
+    }
+
+    /// <summary>
+    /// 現在のプレイヤーの実際の移動速度（基本速度 + 強化分）を取得します。
+    /// </summary>
+    public float GetActualPlayerMoveSpeed()
+    {
+        return basePlayerMoveSpeed + (playerMoveSpeedLevel - 1) * moveSpeedPerLevel;
     }
 
     // ゲームオーバー処理（時間切れ以外でゲームを終了する場合）
