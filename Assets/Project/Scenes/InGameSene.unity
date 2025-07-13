@@ -3733,6 +3733,14 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2854587820432087437, guid: a6899815265424dae9902cb25d9aa887, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2854587820432087437, guid: a6899815265424dae9902cb25d9aa887, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2854587820432087437, guid: a6899815265424dae9902cb25d9aa887, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -3766,7 +3774,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2854587820432087437, guid: a6899815265424dae9902cb25d9aa887, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1.05
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2854587820432087437, guid: a6899815265424dae9902cb25d9aa887, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3787,6 +3795,30 @@ PrefabInstance:
     - target: {fileID: 4829761748215305990, guid: a6899815265424dae9902cb25d9aa887, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5653964351521710918, guid: a6899815265424dae9902cb25d9aa887, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 5.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 5653964351521710918, guid: a6899815265424dae9902cb25d9aa887, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 5.52
+      objectReference: {fileID: 0}
+    - target: {fileID: 7810608546677325114, guid: a6899815265424dae9902cb25d9aa887, type: 3}
+      propertyPath: m_FlipX
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7810608546677325114, guid: a6899815265424dae9902cb25d9aa887, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -6364482160061617368, guid: 320b2e1ba083048d18ad90514bdb5c68, type: 3}
+    - target: {fileID: 7810608546677325114, guid: a6899815265424dae9902cb25d9aa887, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7810608546677325114, guid: a6899815265424dae9902cb25d9aa887, type: 3}
+      propertyPath: m_Color.g
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
