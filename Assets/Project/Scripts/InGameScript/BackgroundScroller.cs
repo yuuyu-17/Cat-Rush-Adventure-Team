@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class BackgroundScroller : MonoBehaviour
 {
-
     private void Update()
     {
         ScrollBackground();

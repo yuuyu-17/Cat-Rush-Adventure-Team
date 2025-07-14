@@ -4,11 +4,11 @@ using TMPro;
 public class ResultUIManager : MonoBehaviour
 {
     [Header("UI要素")]
-    public TextMeshProUGUI coinsText; // コイン表示用TextをInspectorから割り当てる
-    public TextMeshProUGUI[] itemTexts; // アイテム表示用TextをInspectorから割り当てる
-    public TextMeshProUGUI totalDistanceText; // 総移動距離表示用TextをInspectorから割り当てる
+    [SerializeField] private TextMeshProUGUI coinsText; // コイン表示用TextをInspectorから割り当てる
+    [SerializeField] private TextMeshProUGUI[] itemTexts; // アイテム表示用TextをInspectorから割り当てる
+    [SerializeField] private TextMeshProUGUI totalDistanceText; // 総移動距離表示用TextをInspectorから割り当てる
 
-    void Start()
+    private void Start()
     {
         DisplayResults();
     }

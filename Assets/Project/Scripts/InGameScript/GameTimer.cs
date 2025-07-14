@@ -9,18 +9,18 @@ public class GameTimer : MonoBehaviour
 
     [Header("ゲーム時間設定")]
     [Tooltip("ゲームが終了するまでの時間（秒）です。")]
-    public float gameDuration = 60.0f; // ゲームの継続時間（デフォルトは60秒）
+    [SerializeField] private float gameDuration = 60.0f; // ゲームの継続時間（デフォルトは60秒）
     private float _currentTime; // 現在の残り時間
 
     public bool IsTimeUp { get; private set; } = false;// ゲームが時間切れになったかどうかを示すフラグ
 
     [Header("リザルト画面設定")]
     [Tooltip("時間切れになった時に移行するリザルトシーンの名前です。")]
-    public string resultSceneName = "ResultSene"; // 移行するリザルトシーン名
+    [SerializeField] private string resultSceneName = "ResultSene"; // 移行するリザルトシーン名
 
     [Header("UI表示設定")]
     [Tooltip("残り時間を表示するTextMeshProUGUIコンポーネントを割り当ててください。")]
-    public TextMeshProUGUI timerTextUI; // 残り時間を表示するText
+    [SerializeField] private TextMeshProUGUI timerTextUI; // 残り時間を表示するText
 
     private void Awake()
     {

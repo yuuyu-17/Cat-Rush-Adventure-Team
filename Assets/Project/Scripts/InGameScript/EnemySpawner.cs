@@ -5,17 +5,17 @@ public class EnemySpawner : MonoBehaviour
 {
     [Header("生成する敵のプレハブ")]
     [Tooltip("生成する敵のプレハブのリストをInspectorから割り当ててください。")]
-    public List<GameObject> enemyPrefabs;
+    [SerializeField] private List<GameObject> enemyPrefabs;
 
     [Header("敵ごとの出現Y座標")]
     [Tooltip("enemyPrefabsの各要素に対応する出現Y座標を設定してください。")]
-    public List<float> enemySpawnYPositions;
+    [SerializeField] private List<float> enemySpawnYPositions;
 
     public float spawnInterval = 3.0f; // 敵を生成する間隔（秒）
 
     [Header("生成された敵の親オブジェクト")]
     [Tooltip("敵を生成する親となるTransformを割り当ててください。")]
-    public Transform parentTransform;
+    [SerializeField] private Transform parentTransform;
 
     private float timer;
 
