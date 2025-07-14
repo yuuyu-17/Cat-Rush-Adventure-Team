@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpForce = 500f; // ジャンプ力
     [SerializeField] private Rigidbody2D rb; // プレイヤーのRigidbody2Dへの参照
 
-    void Start()
+    private void Start()
     {
         // Rigidbody2Dコンポーネントを取得（Playerオブジェクトにアタッチされているはず）
         if (rb == null)

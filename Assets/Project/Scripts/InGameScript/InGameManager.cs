@@ -9,12 +9,11 @@ public class InGameManager : MonoBehaviour
 
     [Header("ゲーム全体のスクロール速度設定")]
     [Tooltip("背景や敵の基本的なスクロール速度")]
-    public float baseScrollSpeed = 1.0f;
+    [SerializeField] private float baseScrollSpeed = 1.0f;
 
     [Tooltip("プレイヤーの移動速度がスクロール速度に与える影響の係数")]
-    public float playerSpeedInfluence = 1f;
-
-    private float _playerCurrentMoveSpeed = 1f;
+    [SerializeField] private float playerSpeedInfluence = 1f;
+    [SerializeField] private float _playerCurrentMoveSpeed = 1f;
 
     public float CurrentGameScrollSpeed { get; private set; }
 
@@ -28,8 +27,8 @@ public class InGameManager : MonoBehaviour
     public float basePlayerMoveSpeed = 1.0f; // プレイヤーの基本移動速度
     public int playerMoveSpeedLevel { get; private set; } // 移動速度の現在の強化レベル
     public float moveSpeedPerLevel = 0.5f; // レベルアップごとの移動速度上昇量
-    public int initialUpgradeCost = 10; // 最初の強化に必要なコイン数
-    public int upgradeCostIncreasePerLevel = 5; // レベルアップごとにコストが増加する量
+    [SerializeField] private int initialUpgradeCost = 10; // 最初の強化に必要なコイン数
+    [SerializeField] private int upgradeCostIncreasePerLevel = 5; // レベルアップごとにコストが増加する量
 
     public float currentRunDistanceTraveled { get; private set; } // 現在のゲームプレイでの移動距離
 

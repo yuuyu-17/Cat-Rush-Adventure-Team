@@ -2,17 +2,17 @@ using UnityEngine;
 
 public class EnemyMover : MonoBehaviour
 {
-    public float selfMoveSpeed = 1.0f; // 敵自身の速度
+    [SerializeField] private float selfMoveSpeed = 1.0f; // 敵自身の速度
 
     [Header("エフェクト設定")]
-    public GameObject slashEffectPrefab; // 斬撃エフェクトのプレハブをInspectorから割り当てる
-    public Vector3 effectOffset = new Vector3(0, 0, -0.1f); // エフェクトの位置調整（Zを少し手前にすると重なりやすい）
+    [SerializeField] private GameObject slashEffectPrefab; // 斬撃エフェクトのプレハブをInspectorから割り当てる
+    [SerializeField] private Vector3 effectOffset = new Vector3(0, 0, -0.1f); // エフェクトの位置調整（Zを少し手前にすると重なりやすい）
     private Transform _effectParentTransform; //この変数は外部（EnemySpawner）から設定されるため、privateにする
 
     [Header("報酬設定")]
-    public int coinsOnDefeat = 10; // 倒した時に獲得するコインの数
-    public ItemType itemOnDefeat = ItemType.Coin; // 倒した時に獲得するアイテムの種類
-    public int itemCountOnDefeat = 1; // 獲得するアイテムの数
+    [SerializeField] private int coinsOnDefeat = 10; // 倒した時に獲得するコインの数
+    [SerializeField] private ItemType itemOnDefeat = ItemType.Coin; // 倒した時に獲得するアイテムの種類
+    [SerializeField] private int itemCountOnDefeat = 1; // 獲得するアイテムの数
 
     //エフェクトの親Transformを設定するための公開メソッド
     public void SetEffectParent(Transform parent)
@@ -20,7 +20,7 @@ public class EnemyMover : MonoBehaviour
         _effectParentTransform = parent;
     }
 
-    void Update()
+    private void Update()
     {
         // InGameManagerから現在のゲーム全体のスクロール速度を取得
         float gameScrollSpeed = 0f;
@@ -72,7 +72,7 @@ public class EnemyMover : MonoBehaviour
             {
                 Vector3 effectSpawnPosition = transform.position + effectOffset;
                 GameObject newEffect = Instantiate(slashEffectPrefab, effectSpawnPosition, Quaternion.identity);
-                
+
                 //_effectParentTransformが設定されていれば親にする
                 if (_effectParentTransform != null)
                 {

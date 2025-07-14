@@ -14,7 +14,7 @@ public class StrengthManager : MonoBehaviour
    [SerializeField] private TextMeshProUGUI costText; // 強化コスト表示
    [SerializeField] private Button upgradeSpeedButton; // 移動速度強化ボタン
 
-    void Start()
+    private void Start()
     {
         HomeGoButton.onClick.AddListener(OnHomeGoButtonClicked);
         upgradeSpeedButton.onClick.AddListener(OnUpgradeSpeedButtonClicked);
